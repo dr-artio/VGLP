@@ -1,32 +1,21 @@
 package edu.gsu.cs.vglp.model
 
-import org.biojava3.core.sequence.compound.{DNACompoundSet, NucleotideCompound}
-import collection.JavaConversions._
+import HaplotypeObject.{sMap, eps, N}
 import collection.mutable
+
 /**
  * Created with IntelliJ IDEA.
  * User: aartyomenko
- * Date: 6/7/13
- * Time: 12:45 PM
- * To change this template use File | Settings | File Templates.
+ * Class for representing Haplotype instances or fractional Strings
+ * Strings with probabilities of each symbol on each position.
+ * @param n
+ *          Initial Length (Sealed)
  */
-
 class Haplotype(n: Int) {
-  val N = "N"
-  val DASH = "-"
-  val sMap: Map[String, Set[NucleotideCompound]] = reverseMap(nuclMap)
-  val nuclMap: Map[NucleotideCompound, String] = {
-    DNACompoundSet.getDNACompoundSet.getAllCompounds.map(n => {
-      var s = n.getShortName.toUpperCase
-      if (s == N) s = DASH
-      (n, s)
-    }).toMap
-  }
+  var freq = 1.0
   val data: List[mutable.Map[String, Double]] = {
     List.range(0, n).map(i => mutable.Map(sMap.keys.map(s => (s, 0D)).toSeq: _*))
   }
-  var freq = 1.0
-  var eps = 0.005
 
   def this(str: String) = {
     this(str.length)
@@ -102,14 +91,6 @@ class Haplotype(n: Int) {
       else N
     })
     s.toString
-  }
-
-  private def reverseMap[K, V](mp: Map[K, V]): Map[V, Set[K]] = {
-    val r = mp.values.map(v => (v, mutable.Set[K]())).toMap
-    mp.foreach((e: (K, V)) => {
-      r(e._2) += e._1
-    })
-    return r.map((e: (V, mutable.Set[K])) => e._1 -> e._2.toSet)
   }
 
   override def toString = {

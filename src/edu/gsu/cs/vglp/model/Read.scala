@@ -5,9 +5,11 @@ import net.sf.samtools.SAMRecord
 /**
  * Created with IntelliJ IDEA.
  * User: aartyomenko
- * Date: 6/7/13
- * Time: 3:20 PM
- * To change this template use File | Settings | File Templates.
+ * Wrapper for read object. Store alignment and
+ * extended sequence (with dashes)
+ * @param rc
+ *           @see SAMRecord object shift beginning
+ *                by 1 since parsing SAM file
  */
 class Read (rc: SAMRecord) {
   var freq = 1.0
