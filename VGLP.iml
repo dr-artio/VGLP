@@ -4,7 +4,7 @@
     <facet type="scala" name="Scala">
       <configuration>
         <option name="compilerLibraryLevel" value="Project" />
-        <option name="compilerLibraryName" value="scala" />
+        <option name="compilerLibraryName" value="scala-compiler" />
       </configuration>
     </facet>
   </component>
@@ -12,16 +12,12 @@
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/edu.gsu.cs.vglp.main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/edu.gsu.cs.vglp.main/resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="scala" level="project" />
+    <orderEntry type="library" name="scala-library" level="project" />
     <orderEntry type="library" name="Maven: org.biojava:biojava3-core:3.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.scalatest:scalatest_2.10:2.0.M5b" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.0" level="project" />
@@ -35,7 +31,6 @@
     <orderEntry type="library" name="Maven: org.apache.ant:ant-apache-bcel:1.8.4" level="project" />
     <orderEntry type="library" name="Maven: bcel:bcel:5.1" level="project" />
     <orderEntry type="library" name="Maven: regexp:regexp:1.2" level="project" />
-    <orderEntry type="library" name="javailp-1.2a" level="project" />
   </component>
 </module>
 
