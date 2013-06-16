@@ -34,6 +34,7 @@ package object exec {
     val samMap = samRecords.map(s => (SAMParser.toExtendedString(s, l), s)).toMap
     val reads = toReads(samMap)
     initReadFreqs(reads, readsMap)
+    normalizeReadFreqs(reads)
     reads
   }
 
@@ -52,6 +53,7 @@ package object exec {
     val samRecords = toSAMRecords(readsMap.keys)
     val reads = toReads(samRecords)
     initReadFreqs(reads, readsMap)
+    normalizeReadFreqs(reads)
     reads
   }
 
@@ -80,6 +82,13 @@ package object exec {
   private def initReadFreqs(reads: Iterable[Read], readsMap: mutable.Map[String, Int]) {
     reads foreach (r => {
       r.freq = readsMap(r.seq)
+    })
+  }
+
+  private def normalizeReadFreqs(reads: Iterable[Read]) = {
+    val s = reads.map(r => r.freq).sum
+    reads foreach (r => {
+      r.freq /= s
     })
   }
 
