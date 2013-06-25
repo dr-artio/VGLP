@@ -13,7 +13,6 @@ import collection.JavaConversions._
 object HaplotypeObject {
   val N = "N"
   val DASH = "-"
-  val sMap: Map[String, Set[NucleotideCompound]] = reverseMap(nuclMap)
   val nuclMap: Map[NucleotideCompound, String] = {
     DNACompoundSet.getDNACompoundSet.getAllCompounds.map(n => {
       var s = n.getShortName.toUpperCase
@@ -21,7 +20,7 @@ object HaplotypeObject {
       (n, s)
     }).toMap
   }
-
+  val sMap: Map[String, Set[NucleotideCompound]] = reverseMap(nuclMap)
   var eps = 0.005
 
   /**

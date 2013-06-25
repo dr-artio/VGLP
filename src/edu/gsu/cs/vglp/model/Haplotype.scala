@@ -51,7 +51,9 @@ class Haplotype(n: Int) {
   def addRead(r: Read) = {
     var s = r.beg
     r.seq foreach (c => {
-      data(s)(c.toString) += 1
+      if (data(s).contains(c.toString)){
+        data(s)(c.toString) += r.freq
+      }
       s += 1
     })
   }

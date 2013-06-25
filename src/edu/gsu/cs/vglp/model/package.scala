@@ -49,8 +49,38 @@ package object model {
   def prepareLPStep(hapls: List[Haplotype]) = {
     roundHaplotypes(hapls)
     initHrs(hapls)
+    normalizeHirs
     h_irs
   }
+
+  private def initHrs(gens: List[Haplotype], h_vgs: Array[Double]): Array[Array[Double]] = {
+    h_irs = Array.fill[Double](gens.size + 1, reads.size) { 1.0 }
+    if (gens.size == 0 || reads.size == 0) {
+      return h_irs
+    }
+    var g = 0
+    while (g < gens.size) {
+      val gen = gens(g)
+      val lm = gen.data.length
+      var i = 0
+      while (i < lm) {
+        for (c <- table(i)) {
+          if (gen.data(i).contains(c._1)) {
+            val multiplier = gen.data(i)(c._1)
+            for (r <- c._2) {
+              val j = r._2
+              h_irs(g)(j) *= multiplier
+            }
+          }
+        }
+        i += 1
+      }
+      g += 1
+    }
+    for ((d,i) <- h_vgs.zipWithIndex) h_irs(g)(i) = d
+    h_irs
+  }
+
 
   /**
    * Initialize h_rs in two dimensional grid of
@@ -85,13 +115,25 @@ package object model {
     h_irs
   }
 
+  private def normalizeHirs = {
+    for (row <- h_irs){
+      val s = row.sum
+      for (i <- 0 until row.size) {
+        row(i) /= s
+      }
+    }
+  }
+
   private def roundHaplotypes(gens: List[Haplotype]) = {
     for (g <- gens) g.round
   }
 
-  private def estimateAlleleFreqs(gens: List[Haplotype]) = {
-    val pqrs = getPqrs(null, null)
+  def estimateAlleleFreqs(gens: List[Haplotype], freqs: List[Double], h_vgs: Array[Double]) = {
+    val pqrs = getPqrs(gens, freqs, h_vgs)
     for (g <- gens.zipWithIndex.par) doAlleleFreqEstimation(g._1, pqrs(g._2))
+    val virtHapl = new Haplotype(gens(0).data.length)
+    doAlleleFreqEstimation(virtHapl, pqrs(gens.size))
+    virtHapl
   }
 
   /**
@@ -104,12 +146,12 @@ package object model {
    * p_qrs probabilities of emitting read by corresponding
    * haplotype
    */
-  private def getPqrs(gens: List[Haplotype], freqs: List[Double]) = {
-    val h_rs = initHrs(gens)
-    val pqrs = Array.ofDim[Double](gens.size, reads.size)
+  private def getPqrs(gens: List[Haplotype], freqs: List[Double], h_vgs: Array[Double]) = {
+    val h_rs = initHrs(gens, h_vgs)
+    val pqrs = Array.ofDim[Double](gens.size + 1, reads.size)
     val rSums = new Array[Double](reads.size)
     val rs = (0 until reads.size)
-    val gs = (0 until gens.size)
+    val gs = (0 until gens.size + 1)
     rs foreach (r => {
       gs foreach (g => {
         pqrs(g)(r) = freqs(g) * h_rs(g)(r)

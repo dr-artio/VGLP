@@ -2,6 +2,7 @@ package edu.gsu.cs.vglp.exec
 
 import edu.gsu.cs.vglp.io.ArgumentParser.parseMaxHD
 import edu.gsu.cs.vglp.io.OutputHandler.{outputHaplotypes, outputResult}
+import edu.gsu.cs.vglp.model.{Haplotype, VirtualGenotypeWrapper, initReads}
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,12 +18,9 @@ object Main {
 
     val reads = if (fl.getName.toLowerCase.endsWith(".sam")) initSAMReads(fl)
     else initFastaReads(fl)
-    val seeds = readDataAndInitialSeqs(cfl)
-//    initReads(reads.toList)
-//
-//    val gens = run(reads.toList, k, tr, seeds)
-
-//    outputHaplotypes(outh, gens)
-//    outputResult(out, gens, s, reads.size)
+    initReads(reads.toList)
+    val consensus = new Haplotype(reads.toList)
+    consensus.round
+    VirtualGenotypeWrapper.run(consensus)
   }
 }
